@@ -1,39 +1,36 @@
-const Gameboard = (function () {
-    // handles logic to do with the gameboard itself
-    // builds the board itself
+function Gameboard() {
     const board = new Array(9);
 
-    // changes the cell values
-    const changeCell = function (mark, index) {
-        board[index] = mark;
+    function changeCell(mark, index) {
+        if (board[index] === undefined) {
+            board[index] = mark;
+        } else {
+            return;
+        }
     };
 
-    // returns the board
     const getBoard = () => board;
 
     return {
         getBoard,
         changeCell
     };
-})();
+};
 
-const Player = function (playerName, playerMark) {
+function Player(playerName, playerMark) {
     const name = playerName;
     const mark = playerMark;
 
-    const getName = () => name;
-    const getMark = () => mark;
-
     return {
-        getName,
-        getMark
+        name,
+        mark
     };
 };
 
-const GameController = (function () {
-    // handles the flow of the game
-    // whose turn it is
-    // whether there is a winner or not
+function GameController(player1, player2) {
+    function playRound() {
+        // code here
+    }
 
     function checkWinner(mark) {
         const board = Gameboard.getBoard();
@@ -61,16 +58,8 @@ const GameController = (function () {
             }
         };
     };
-    // play a round of the game
+
     return {
         checkWinner
     };
-})();
-
-const board = Gameboard.getBoard();
-Gameboard.changeCell("X", 0);
-Gameboard.changeCell("X", 1);
-Gameboard.changeCell("X", 3);
-Gameboard.changeCell("X", 6);
-
-console.log(GameController.checkWinner("X"));
+};
