@@ -2,11 +2,7 @@ function Gameboard() {
     const board = new Array(9);
 
     function changeCell(mark, index) {
-        if (board[index] === undefined) {
-            board[index] = mark;
-        } else {
-            return;
-        }
+        board[index] = mark;
     };
 
     const getBoard = () => board;
@@ -28,12 +24,34 @@ function Player(playerName, playerMark) {
 };
 
 function GameController(player1, player2) {
-    function playRound() {
-        // code here
+    const players = [player1, player2];
+    const board = Gameboard();
+    let activePlayer = players[0];
+
+    function changeActivePlayer() {
+        if (activePlayer === players[0]) {
+            activePlayer = players[1];
+        } else activePlayer = players[0];
+    };
+
+    function playRound(cell) {
+        const currentBoard = board.getBoard();
+
+        if (currentBoard[cell] === undefined) {
+            board.changeCell(activePlayer.mark, cell);
+            if (checkWinner(activePlayer.mark) === true) {
+                console.log(`${activePlayer} wins!`);
+                return;
+            }
+            console.log(currentBoard);
+            changeActivePlayer();
+        } else {
+            return;
+        }
     }
 
     function checkWinner(mark) {
-        const board = Gameboard.getBoard();
+        const currentBoard = board.getBoard();
         const winConditions = [
             [0, 1, 2],
             [3, 4, 5],
@@ -50,7 +68,7 @@ function GameController(player1, player2) {
             const checkArray = [];
 
             for (let j = 0; j < combo.length; j++) {
-                const value = board[combo[j]];
+                const value = currentBoard[combo[j]];
                 checkArray.push(value);
             };
             if (checkArray.every(value => value === mark)) {
@@ -60,6 +78,20 @@ function GameController(player1, player2) {
     };
 
     return {
-        checkWinner
+        playRound
     };
 };
+
+// testing "backend"
+const john = Player("John", "O");
+const mary = Player("Mary", "X");
+const game = GameController(john, mary);
+
+game.playRound(4);
+game.playRound(3);
+game.playRound(0);
+game.playRound(8);
+game.playRound(2);
+game.playRound(6);
+game.playRound(6); // to check that it won't play a round on an already populated square
+game.playRound(1);
