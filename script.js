@@ -43,7 +43,6 @@ function GameController(player1, player2) {
                 console.log(`${activePlayer} wins!`);
                 return;
             }
-            console.log(currentBoard);
             changeActivePlayer();
         } else {
             return;
@@ -87,7 +86,11 @@ function GameController(player1, player2) {
 // UI Stuff
 // =============================
 function ScreenController() {
-    const game = GameController();
+    // players for testing
+    const player1 = Player("player1", "O");
+    const player2 = Player("player2", "X");
+
+    const game = GameController(player1, player2);
     const boardDiv = document.querySelector(".board");
 
     const testElement = document.createElement("p");
@@ -114,7 +117,7 @@ function ScreenController() {
         if (!selectedCell) return;
 
         game.playRound(selectedCell);
-        updateScreen();
+        updateBoard();
     };
     boardDiv.addEventListener("click", clickHandlerBoard);
 
