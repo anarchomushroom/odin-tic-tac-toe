@@ -102,11 +102,6 @@ function ScreenController() {
     const game = GameController(player1, player2);
     const boardDiv = document.querySelector(".board");
 
-    const testElement = document.createElement("p");
-    testElement.textContent = "Hello working";
-
-    boardDiv.appendChild(testElement);
-
     function updateBoard() {
         const board = game.getBoard();
 
