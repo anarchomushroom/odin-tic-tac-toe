@@ -27,6 +27,7 @@ function GameController(player1, player2) {
     const players = [player1, player2];
     const board = Gameboard();
     let activePlayer = players[0];
+    let gameState = "active";
 
     function changeActivePlayer() {
         if (activePlayer === players[0]) {
@@ -36,11 +37,13 @@ function GameController(player1, player2) {
 
     function playRound(cell) {
         const currentBoard = board.getBoard();
+        if (gameState === "complete") return;
 
         if (currentBoard[cell] === "") {
             board.changeCell(activePlayer.mark, cell);
             if (checkWinner(activePlayer.mark) === true) {
                 console.log(`${activePlayer} wins!`);
+                changeGameState();
                 return;
             }
             changeActivePlayer();
@@ -74,6 +77,12 @@ function GameController(player1, player2) {
                 return true;
             }
         };
+    };
+
+    function changeGameState() {
+        if (gameState === "active") {
+            gameState = "complete";
+        } else gameState = "active";
     };
 
     return {
