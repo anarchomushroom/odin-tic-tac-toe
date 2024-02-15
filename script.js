@@ -29,6 +29,10 @@ function GameController(player1, player2) {
     let activePlayer = players[0];
     let gameState = "active";
 
+    const getGameState = () => gameState;
+
+    const getActivePlayer = () => activePlayer;
+
     function changeActivePlayer() {
         if (activePlayer === players[0]) {
             activePlayer = players[1];
@@ -42,7 +46,7 @@ function GameController(player1, player2) {
         if (currentBoard[cell] === "") {
             board.changeCell(activePlayer.mark, cell);
             if (checkWinner(activePlayer.mark) === true) {
-                console.log(`${activePlayer} wins!`);
+                console.log(`${activePlayer.name} wins!`);
                 changeGameState();
                 return;
             }
@@ -87,7 +91,10 @@ function GameController(player1, player2) {
 
     return {
         playRound,
-        getBoard: board.getBoard
+        getBoard: board.getBoard,
+        getGameState,
+        changeGameState,
+        getActivePlayer
     };
 };
 
@@ -101,6 +108,7 @@ function ScreenController() {
 
     const game = GameController(player1, player2);
     const boardDiv = document.querySelector(".board");
+    const infoDiv = document.querySelector(".game-info");
 
     function updateBoard() {
         const board = game.getBoard();
@@ -116,16 +124,24 @@ function ScreenController() {
         });
     };
 
+    function updateStatus() {
+        if (game.getGameState() === "complete") {
+            infoDiv.textContent = `${game.getActivePlayer().name} is the winner!`
+        } else infoDiv.textContent = `${game.getActivePlayer().name}'s turn`
+    };
+
     function clickHandlerBoard(e) {
         const selectedCell = e.target.dataset.cell;
         if (!selectedCell) return;
 
         game.playRound(selectedCell);
+        updateStatus();
         updateBoard();
     };
     boardDiv.addEventListener("click", clickHandlerBoard);
 
     updateBoard();
+    updateStatus();
 };
 
 ScreenController();
