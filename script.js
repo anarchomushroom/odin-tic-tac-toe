@@ -1,5 +1,5 @@
 function Gameboard() {
-    const board = new Array(9);
+    const board = new Array(9).fill("");
 
     function changeCell(mark, index) {
         board[index] = mark;
@@ -37,7 +37,7 @@ function GameController(player1, player2) {
     function playRound(cell) {
         const currentBoard = board.getBoard();
 
-        if (currentBoard[cell] === undefined) {
+        if (currentBoard[cell] === "") {
             board.changeCell(activePlayer.mark, cell);
             if (checkWinner(activePlayer.mark) === true) {
                 console.log(`${activePlayer} wins!`);
@@ -90,6 +90,11 @@ function ScreenController() {
     const game = GameController();
     const boardDiv = document.querySelector(".board");
 
+    const testElement = document.createElement("p");
+    testElement.textContent = "Hello working";
+
+    boardDiv.appendChild(testElement);
+
     function updateBoard() {
         const board = game.getBoard();
 
@@ -104,7 +109,16 @@ function ScreenController() {
         });
     };
 
-    return {
-        updateBoard
-    }
-}
+    function clickHandlerBoard(e) {
+        const selectedCell = e.target.dataset.cell;
+        if (!selectedCell) return;
+
+        game.playRound(selectedCell);
+        updateScreen();
+    };
+    boardDiv.addEventListener("click", clickHandlerBoard);
+
+    updateBoard();
+};
+
+ScreenController();
