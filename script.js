@@ -78,20 +78,33 @@ function GameController(player1, player2) {
     };
 
     return {
-        playRound
+        playRound,
+        getBoard: board.getBoard
     };
 };
 
-// testing "backend"
-const john = Player("John", "O");
-const mary = Player("Mary", "X");
-const game = GameController(john, mary);
+// =============================
+// UI Stuff
+// =============================
+function ScreenController() {
+    const game = GameController();
+    const boardDiv = document.querySelector(".board");
 
-game.playRound(4);
-game.playRound(3);
-game.playRound(0);
-game.playRound(8);
-game.playRound(2);
-game.playRound(6);
-game.playRound(6); // to check that it won't play a round on an already populated square
-game.playRound(1);
+    function updateBoard() {
+        const board = game.getBoard();
+
+        boardDiv.textContent = "";
+
+        board.forEach((cell, index) => {
+            const cellButton = document.createElement("button");
+            cellButton.classList.add("cell");
+            cellButton.dataset.cell = index;
+            cellButton.textContent = cell;
+            boardDiv.appendChild(cellButton);
+        });
+    };
+
+    return {
+        updateBoard
+    }
+}
